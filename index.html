@@ -207,21 +207,21 @@ document.getElementById('conect-post-status').onclick=async()=>{const room=typeo
 load();
 };if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ready);else ready();
 })();
-</script><style>#attachment-options{max-height:36dvh;overflow-y:auto}#conect-document-file{display:none}#conect-files-panel{padding:8px 14px;background:#102733;max-height:26dvh;overflow:auto}#conect-files-panel button{width:auto;margin:4px;padding:8px 12px;font-size:12px}#conect-files-panel p{font-size:12px;margin:6px;color:#c4d2d9}</style><script>
+</script><style>#attachment-options{max-height:36dvh;overflow-y:auto}#conect-document-file{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none}.conect-native-picker{display:inline-flex;align-items:center;position:relative;border:1px solid #4b6572;border-radius:22px;padding:10px 14px;font-size:12px;cursor:pointer;color:#c9dbe2;background:#122c39}#conect-files-panel{padding:8px 14px;background:#102733;max-height:26dvh;overflow:auto}#conect-files-panel button{width:auto;margin:4px;padding:8px 12px;font-size:12px}#conect-files-panel p{font-size:12px;margin:6px;color:#c4d2d9}</style><script>
 (function(){
 const setup=()=>{
 const menu=document.getElementById('attachment-options'),chat=document.getElementById('chat-active'),form=document.getElementById('message-form');if(!menu||!chat||!form)return;
-const pick=document.createElement('button');pick.type='button';pick.className='secondary';pick.textContent='📄 Documento / PDF';
+const pick=document.createElement('label');pick.className='secondary conect-native-picker';pick.textContent='📄 Documento / PDF';pick.setAttribute('for','conect-document-file');
 const browse=document.createElement('button');browse.type='button';browse.className='secondary';browse.textContent='📁 Arquivos recebidos';
 const input=document.createElement('input');input.type='file';input.id='conect-document-file';input.accept='.pdf,.doc,.docx,.txt,.odt,.xls,.xlsx,.ppt,.pptx,.csv,application/pdf';
-menu.append(pick,browse);chat.append(input);
+pick.append(input);menu.append(pick,browse);
 const panel=document.createElement('div');panel.id='conect-files-panel';panel.className='hidden';form.before(panel);
 const notice=t=>{const el=document.getElementById('chat-status');if(el)el.textContent=t;};
 const allowed=/\.(pdf|doc|docx|txt|odt|xls|xlsx|ppt|pptx|csv)$/i;
 const current=()=>typeof activeRoom!=='undefined'?activeRoom:null;
-pick.onclick=()=>{if(!current()){notice('Abra uma conversa primeiro.');return;}input.click();menu.classList.add('hidden');};
+pick.addEventListener('click',()=>{if(!current())notice('Abra uma conversa primeiro.');});
 input.onchange=async()=>{
-const file=input.files?.[0],room=current();input.value='';if(!file||!room)return;
+const file=input.files?.[0],room=current();input.value='';if(!file||!room){notice('Nenhum documento selecionado ou conversa indisponível.');return;}menu.classList.add('hidden');
 if(!allowed.test(file.name)||file.size>20*1024*1024||!file.size){notice('Escolha um documento de até 20 MB.');return;}
 if(typeof chatKey==='undefined'||!chatKey){notice('A chave da conversa não está disponível.');return;}
 const key=chatKey,roomAtStart=room;pick.disabled=true;notice('Criptografando documento…');
