@@ -1,0 +1,42 @@
+/* R.A.I. Connect visual system v1 — preserves existing controls */
+:root{--bg:#071c27;--panel:#102d3a;--gold:#e9c47c;--muted:#a8bdc6;--line:#ffffff1d;--connect-radius:18px}
+body{background:radial-gradient(ellipse at 50% -20%,#1c5260 0%,#081d29 58%,#06151e 100%);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+main{background:linear-gradient(170deg,#092634,#061923 75%);padding-top:24px}
+.logged-in main{padding-top:16px}
+.brand{position:relative}
+.logged-in .brand{padding:7px 4px 18px;border-bottom:1px solid #b18a4640;margin-bottom:15px}
+.logged-in .brand h1{font-size:clamp(23px,6vw,29px);font-weight:680;letter-spacing:.35px;color:#f6e9cf}
+.logged-in .brand .bird{filter:drop-shadow(0 2px 8px #e3bb6a25)}
+.hub-heading{padding:4px 0 8px;gap:12px}
+.hub-heading h2{font-size:23px;font-weight:730;letter-spacing:-.5px;margin:8px 0 12px}
+.hub-heading .round{width:44px;height:44px;box-shadow:0 4px 18px #c69a4938;border:1px solid #f7dfaa66;transition:transform .16s ease,box-shadow .16s ease}
+.hub-heading .round:active{transform:scale(.95)}
+#search-contacts{border:1px solid #52707a;background:#133340;border-radius:16px;padding:13px 16px}
+#search-contacts:focus-visible,button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid #f1d390;outline-offset:3px}
+.chips{gap:8px;margin:13px 0 12px;overflow-x:auto;padding-bottom:3px}
+.chip{border-radius:999px;padding:10px 18px;border:1px solid #b78f5059;white-space:nowrap}
+.chip.secondary{background:#173440;color:#bcd0d7;border-color:#42616a}
+.chat-card{padding:13px 3px;border-bottom:1px solid #9cb2bc24;min-height:73px}
+.chat-card .avatar{height:52px;width:52px;background:linear-gradient(150deg,#377d87,#16465b);border:1px solid #d7b47270;color:#ffe5a5;font-weight:700}
+.chat-card .contact-info strong{font-size:16px;letter-spacing:.1px}
+.chat-card .contact-info small{font-size:12px;line-height:1.5}
+.nav-row{position:sticky;bottom:0;background:#0a2430ed;backdrop-filter:blur(12px);border-top:1px solid #b48d4b50;border-radius:16px 16px 0 0;padding:12px 6px calc(10px + env(safe-area-inset-bottom));z-index:3}
+.nav-row button,.nav-row a{min-height:40px;display:grid;place-items:center;border-radius:12px;font-size:12px}
+.nav-row button:active,.nav-row a:active{background:#1c3c48}
+.chatting main{padding-top:0}
+.chat-header{background:linear-gradient(120deg,#103442,#092531);border-bottom:1px solid #bc9a6055;gap:9px;padding:13px 12px}
+.chat-header h2{font-size:17px;color:#f8ecd8}
+.chat-header .avatar{border:1px solid #cba96766}
+.connect-call-btn{border:1px solid #d9b777!important;background:#173c48!important;box-shadow:0 0 0 3px #d9b77714;color:#f2d493!important}
+#messages{background:radial-gradient(ellipse at 90% 100%,#12414a80,transparent 70%),#071f2b}
+.bubble{box-shadow:0 2px 8px #0002}
+.bubble.mine{background:#14556a}
+#message-form{background:#092632;border-top:1px solid #a98d5b55}
+#message-form input{background:#143744}
+button:not(:disabled),a.nav{transition:filter .16s ease,transform .16s ease}
+button:not(:disabled):active{filter:brightness(1.1);transform:scale(.98)}
+#personal-statuses{background:linear-gradient(145deg,#123441,#0d2834);border:1px solid #ad8b4c50!important;border-radius:18px!important;padding:14px!important;margin:10px 0 18px!important}
+#personal-statuses .status-ring{border-color:#e4bb6e}
+#personal-statuses .status-ring-inner{background:linear-gradient(145deg,#377788,#19485d)}
+@media(min-width:650px){main{border-color:#bd9b5e50;box-shadow:0 20px 100px #0009,0 0 0 1px #d8b46b12}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
