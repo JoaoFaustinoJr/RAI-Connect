@@ -1,5 +1,6 @@
 (function(){
 'use strict';
+function initializeCalls(){
 const db=()=>window.supabase, room=()=>window.activeRoom, user=()=>window.chatUser;
 const callButton=document.querySelector('.connect-call-btn');
 if(!callButton)return;
@@ -28,4 +29,6 @@ async function tick(){if(checking||!db()||!user())return;checking=true;try{if(ac
 callButton.onclick=dial;answer.onclick=accept;decline.onclick=()=>end(true);overlay.querySelector('#call-end').onclick=()=>end(true);
 setInterval(tick,1600);
 window.addEventListener('pagehide',()=>{if(stream)stream.getTracks().forEach(t=>t.stop());});
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(initializeCalls,0));else setTimeout(initializeCalls,0);
 })();
