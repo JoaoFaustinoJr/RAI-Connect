@@ -73,3 +73,12 @@ button:not(:disabled):active{filter:brightness(1.1);transform:scale(.98)}
 .message-actions>button{display:block;width:100%;min-width:158px;white-space:nowrap;text-align:left;margin:4px 0 0;padding:10px 12px;border-radius:10px;background:#173a48;color:#f2d7a1;border:1px solid #d6b77b42}
 .message-actions[open]{min-width:158px}
 .bubble{padding-bottom:9px}
+
+/* Compact chat bubbles: timestamp and menu share one baseline */
+.bubble{position:relative;min-height:0!important;padding:10px 12px 9px!important;line-height:1.4}
+.bubble time{display:block!important;margin-top:3px!important;padding-right:34px!important;min-height:20px!important;line-height:20px!important;text-align:right!important;font-size:10px}
+.bubble .message-actions{position:absolute!important;right:9px!important;bottom:7px!important;margin:0!important;padding:0!important;border:0!important;min-width:0;z-index:2}
+.bubble .message-actions>summary{width:29px!important;height:23px!important;display:grid!important;place-items:center!important;font-size:21px!important;line-height:1!important}
+.bubble .message-actions[open]{min-width:164px!important;background:#10313e;border:1px solid #d6b77b55;border-radius:12px;padding:5px 8px 8px!important;box-shadow:0 10px 25px #0008}
+.bubble .message-actions[open]>button{margin:4px 0!important}
+.bubble .photo{margin-top:3px}
