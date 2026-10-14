@@ -11,7 +11,7 @@ document.body.append(overlay);
 const phase=overlay.querySelector('#call-phase'),remote=overlay.querySelector('#call-remote'),local=overlay.querySelector('#call-local'),answer=overlay.querySelector('#call-answer'),decline=overlay.querySelector('#call-decline');
 let active=null,pc=null,stream=null,other=null,seen=0,starting=false,pendingCandidates=[];
 function info(message){phase.textContent=message;}
-async function members(r){const {data,error}=await db().from('connect_members').select('user_id').eq('room_id',r);if(error)throw error;return data.map(x=>x.user_id);}
+async function members(r){const info=window.activeInfo;if(info&&Array.isArray(info.members)&&info.members.length){return [...new Set(info.members.map(m=>m.id).filter(Boolean))];}const {data,error}=await db().rpc('rai_chat_info',{p_room:r});if(error)throw error;return [...new Set((data?.members||[]).map(m=>m.id).filter(Boolean))];}
 async function send(payload){if(!active||!other)return;const {error}=await db().from('connect_call_signals').insert({call_id:active.id,sender_id:user(),recipient_id:other,payload});if(error)throw error;}
 async function media(){stream=await navigator.mediaDevices.getUserMedia({audio:true,video:{facingMode:'user'}});local.srcObject=stream;}
 async function peer(){pc=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'}]});pc.onicecandidate=e=>{if(e.candidate)send({type:'candidate',candidate:e.candidate.toJSON()}).catch(()=>info('Falha na conexão de rede.'));};pc.ontrack=e=>{remote.srcObject=e.streams[0];info('Chamada conectada');};pc.onconnectionstatechange=()=>{if(pc?.connectionState==='failed')info('Não foi possível conectar. Pode ser necessário um servidor TURN.');};stream.getTracks().forEach(t=>pc.addTrack(t,stream));}
