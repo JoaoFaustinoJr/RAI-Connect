@@ -64,3 +64,12 @@ button:not(:disabled):active{filter:brightness(1.1);transform:scale(.98)}
 #attach-image{border-radius:50%!important;border:1px solid #64818c!important;color:#f1d18c!important;background:#102c39!important;font-size:28px!important;line-height:1}
 #send-message{background:linear-gradient(145deg,#ffe2a0,#d5a85d);box-shadow:0 2px 12px #d9ac5c30;font-size:21px!important}
 #message-form input{min-width:0}
+
+/* Minimal, discoverable message action menu */
+.message-actions{position:relative;align-self:flex-end;margin:1px 0 -4px;padding:0;border:0;text-align:right}
+.message-actions>summary{display:inline-grid;place-items:center;width:30px;height:24px;padding:0;margin:0;color:#b7d0d8;font-size:21px;font-weight:700;line-height:1;border-radius:9px;cursor:pointer}
+.message-actions>summary:before{content:none!important}
+.message-actions>summary:hover,.message-actions[open]>summary{background:#ffffff16;color:#f4d38c}
+.message-actions>button{display:block;width:100%;min-width:158px;white-space:nowrap;text-align:left;margin:4px 0 0;padding:10px 12px;border-radius:10px;background:#173a48;color:#f2d7a1;border:1px solid #d6b77b42}
+.message-actions[open]{min-width:158px}
+.bubble{padding-bottom:9px}
