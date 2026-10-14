@@ -208,19 +208,4 @@ document.getElementById('conect-post-status').onclick=async()=>{const room=typeo
 load();
 };if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ready);else ready();
 })();
-</script><style>.connect-call-btn{border:1px solid #d5ae68;color:#f0ce8b;background:#15313d;border-radius:50%;height:42px;width:42px;flex-shrink:0;font-size:20px}.connect-call-layer{position:fixed;inset:0;z-index:9999;background:#061a24;display:flex;flex-direction:column;padding:22px;gap:14px;color:white}.connect-call-layer[hidden]{display:none}.connect-call-layer video{width:100%;max-height:55vh;background:#000;border-radius:18px;object-fit:cover}.connect-call-layer button{width:auto;margin:4px}</style><script>
-(function(){
-const init=()=>{const header=document.querySelector('#chat-active .chat-header');if(!header)return;
-const btn=document.createElement('button');btn.type='button';btn.className='connect-call-btn';btn.title='Preparar videochamada';btn.setAttribute('aria-label','Preparar videochamada');btn.textContent='📹';header.insertBefore(btn,header.querySelector('#chat-tools'));
-const layer=document.createElement('section');layer.className='connect-call-layer';layer.hidden=true;
-const heading=document.createElement('h2');heading.textContent='Videochamada · R.A.I. Connect';
-const detail=document.createElement('p');detail.textContent='Teste de câmera e microfone. A ligação com outro participante ainda está em desenvolvimento.';
-const video=document.createElement('video');video.autoplay=true;video.muted=true;video.playsInline=true;
-const controls=document.createElement('div');const close=document.createElement('button');close.type='button';close.textContent='Encerrar prévia';const flip=document.createElement('button');flip.type='button';flip.textContent='Alternar câmera';controls.append(close,flip);layer.append(heading,detail,video,controls);document.body.append(layer);
-let stream=null,facing='user';
-async function stop(){if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}video.srcObject=null;layer.hidden=true;}
-async function start(){try{if(stream)stream.getTracks().forEach(t=>t.stop());stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:facing}},audio:true});video.srcObject=stream;detail.textContent='Câmera e microfone autorizados. Esta é apenas uma prévia local: ninguém está recebendo sua imagem.';}catch(e){detail.textContent='Não foi possível acessar câmera/microfone. Confira as permissões do navegador.';}}
-btn.onclick=async()=>{layer.hidden=false;await start();};close.onclick=stop;flip.onclick=async()=>{facing=facing==='user'?'environment':'user';await start();};document.addEventListener('visibilitychange',()=>{if(document.hidden&&stream)stop();});
-};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
-})();
-</script><script src="video-calls.js?v=1" defer></script></body></html>
+</script><style>.connect-call-btn{border:1px solid #d5ae68;color:#f0ce8b;background:#15313d;border-radius:50%;height:42px;width:42px;flex-shrink:0;font-size:20px}.connect-call-layer{position:fixed;inset:0;z-index:9999;background:#061a24;display:flex;flex-direction:column;padding:22px;gap:14px;color:white}.connect-call-layer[hidden]{display:none}.connect-call-layer video{width:100%;max-height:55vh;background:#000;border-radius:18px;object-fit:cover}.connect-call-layer button{width:auto;margin:4px}</style><script>(function(){const init=()=>{const header=document.querySelector('#chat-active .chat-header');if(!header||header.querySelector('.connect-call-btn'))return;const btn=document.createElement('button');btn.type='button';btn.className='connect-call-btn';btn.title='Iniciar videochamada';btn.setAttribute('aria-label','Iniciar videochamada');btn.textContent='📹';header.insertBefore(btn,header.querySelector('#chat-tools'));};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();</script><script src="video-calls.js?v=2" defer></script></body></html>
