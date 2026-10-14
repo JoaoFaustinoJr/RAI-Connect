@@ -53,3 +53,14 @@ button:not(:disabled):active{filter:brightness(1.1);transform:scale(.98)}
 .chat-tools{flex:0 0 auto}
 .chat-tools>summary{padding:5px 7px;font-size:23px}
 @media(max-width:390px){.chat-header{gap:7px;padding:10px 9px}.chat-header .avatar{width:38px;height:38px}.chat-heading h2{font-size:17px}.chat-heading small{font-size:10px}}
+
+/* Message controls remain accessible without overwhelming each bubble */
+.message-actions{margin:8px 0 0;border-top:1px solid #ffffff1c;padding-top:5px}
+.message-actions>summary{font-size:11px;color:#b9d0d6;cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:5px;padding:6px 2px;user-select:none}
+.message-actions>summary:before{content:"⋯";font-size:20px;line-height:8px;color:#edca85}
+.message-actions>summary::-webkit-details-marker{display:none}
+.message-actions>button{display:block;width:100%;font-size:12px;padding:10px 12px;margin:5px 0;border-radius:10px;background:#173a48;color:#f2d7a1;border:1px solid #d6b77b42;text-align:left}
+.message-actions>button:focus-visible,.message-actions>summary:focus-visible{outline:2px solid #f2d493;outline-offset:2px}
+#attach-image{border-radius:50%!important;border:1px solid #64818c!important;color:#f1d18c!important;background:#102c39!important;font-size:28px!important;line-height:1}
+#send-message{background:linear-gradient(145deg,#ffe2a0,#d5a85d);box-shadow:0 2px 12px #d9ac5c30;font-size:21px!important}
+#message-form input{min-width:0}
