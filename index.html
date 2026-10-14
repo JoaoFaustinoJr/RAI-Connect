@@ -208,88 +208,19 @@ document.getElementById('conect-post-status').onclick=async()=>{const room=typeo
 load();
 };if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ready);else ready();
 })();
-</script><style>#attachment-options{max-height:36dvh;overflow-y:auto}#conect-document-file{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none}.conect-native-picker{display:inline-flex;align-items:center;position:relative;border:1px solid #4b6572;border-radius:22px;padding:10px 14px;font-size:12px;cursor:pointer;color:#c9dbe2;background:#122c39}#conect-files-panel{padding:8px 14px;background:#102733;max-height:26dvh;overflow:auto}#conect-files-panel button{width:auto;margin:4px;padding:8px 12px;font-size:12px}#conect-files-panel p{font-size:12px;margin:6px;color:#c4d2d9}</style><script>
+</script><style>.connect-call-btn{border:1px solid #d5ae68;color:#f0ce8b;background:#15313d;border-radius:50%;height:42px;width:42px;flex-shrink:0;font-size:20px}.connect-call-layer{position:fixed;inset:0;z-index:9999;background:#061a24;display:flex;flex-direction:column;padding:22px;gap:14px;color:white}.connect-call-layer[hidden]{display:none}.connect-call-layer video{width:100%;max-height:55vh;background:#000;border-radius:18px;object-fit:cover}.connect-call-layer button{width:auto;margin:4px}</style><script>
 (function(){
-const setup=()=>{
-const menu=document.getElementById('attachment-options'),chat=document.getElementById('chat-active'),form=document.getElementById('message-form');if(!menu||!chat||!form)return;
-const pick=document.createElement('label');pick.className='secondary conect-native-picker';pick.textContent='📄 Documento / PDF';pick.setAttribute('for','conect-document-file');
-const browse=document.createElement('button');browse.type='button';browse.className='secondary';browse.textContent='📁 Arquivos recebidos';
-const input=document.createElement('input');input.type='file';input.id='conect-document-file';input.accept='.pdf,.doc,.docx,.txt,.odt,.xls,.xlsx,.ppt,.pptx,.csv,application/pdf';
-pick.append(input);menu.append(pick,browse);input.addEventListener('click',()=>{const el=document.getElementById('chat-status');if(el)el.textContent='Seletor aberto. Escolha o PDF para enviar.';});
-const panel=document.createElement('div');panel.id='conect-files-panel';panel.className='hidden';form.before(panel);const uploadPanel=document.createElement('div');uploadPanel.id='conect-upload-panel';uploadPanel.className='hidden';uploadPanel.setAttribute('role','status');uploadPanel.style.cssText='padding:12px 16px;background:#153744;border-top:1px solid #47606b';form.before(uploadPanel);
-const notice=t=>{const el=document.getElementById('chat-status');if(el)el.textContent=t;};
-const allowed=/\.(pdf|doc|docx|txt|odt|xls|xlsx|ppt|pptx|csv)$/i;
-const current=()=>typeof activeRoom!=='undefined'?activeRoom:null;
-pick.addEventListener('click',()=>{if(!current())notice('Abra uma conversa primeiro.');});
-input.addEventListener('change',async()=>{
-const file=input.files?.[0],room=current();if(!file){notice('Nenhum documento recebido do seletor.');return;}notice('Arquivo selecionado: '+file.name);input.value='';if(!room){notice('Conversa indisponível. Abra o grupo novamente.');return;}menu.classList.add('hidden');
-if(!allowed.test(file.name)||file.size>20*1024*1024||!file.size){notice('Escolha um documento de até 20 MB.');return;}uploadPanel.classList.remove('hidden');uploadPanel.replaceChildren();const label=document.createElement('div');label.textContent='📄 '+file.name+' · '+Math.ceil(file.size/1024)+' KB';const progress=document.createElement('div');progress.style.cssText='font-size:12px;color:#f1cf8a;margin-top:6px';progress.textContent='Preparando documento…';uploadPanel.append(label,progress);
-if(typeof chatKey==='undefined'||!chatKey){notice('A chave da conversa não está disponível.');return;}
-const key=chatKey,roomAtStart=room;pick.disabled=true;notice('Criptografando documento…');progress.textContent='Criptografando…';
-try{
-const {data:{user},error:authError}=await supabase.auth.getUser();if(authError||!user)throw Error('Sessão inválida');
-const nonce=crypto.getRandomValues(new Uint8Array(12));
-const plain=await file.arrayBuffer();
-const cipher=await crypto.subtle.encrypt({name:'AES-GCM',iv:nonce,additionalData:new TextEncoder().encode(room+':'+user.id)},key,plain);
-const bytes=new Uint8Array(12+cipher.byteLength);bytes.set(nonce);bytes.set(new Uint8Array(cipher),12);
-const path=room+'/'+user.id+'/'+crypto.randomUUID()+'.bin';
-notice('Enviando documento protegido…');progress.textContent='Enviando arquivo ao armazenamento privado…';
-const {error:uploadError}=await supabase.storage.from('rai-connect-private').upload(path,new Blob([bytes],{type:'application/octet-stream'}),{contentType:'application/octet-stream',upsert:false});if(uploadError)throw uploadError;progress.textContent='Registrando documento na conversa…';
-const {error:dbError}=await supabase.from('connect_attachments').insert({room_id:room,sender_id:user.id,storage_path:path,file_name:file.name.slice(0,255),mime_type:file.type||'application/octet-stream',size_bytes:file.size});if(dbError){await supabase.storage.from('rai-connect-private').remove([path]);throw dbError;}
-notice('Documento enviado à conversa.');progress.textContent='✓ Documento enviado à conversa.';panel.classList.add('hidden');if(current()===roomAtStart)await loadFiles();
-}catch(e){const detail=String(e?.message||'verifique a conexão e as permissões.');notice('Falha no envio do documento: '+detail);progress.textContent='Falha: '+detail;}finally{pick.disabled=false;}
-});
-async function loadFiles(){
-const room=current();if(!room)return;panel.replaceChildren();const title=document.createElement('p');title.textContent='Documentos da conversa';panel.append(title);
-const {data,error}=await supabase.from('connect_attachments').select('id,room_id,sender_id,storage_path,file_name,mime_type,size_bytes').eq('room_id',room).order('created_at',{ascending:false}).limit(40);
-if(error){notice('Não foi possível consultar os arquivos.');return;}
-if(!data?.length){const p=document.createElement('p');p.textContent='Nenhum documento nesta conversa.';panel.append(p);return;}
-for(const item of data){const b=document.createElement('button');b.type='button';b.className='secondary';b.textContent='📄 '+item.file_name+' · '+Math.ceil(item.size_bytes/1024)+' KB';b.onclick=async()=>{
-if(current()!==room){notice('Abra a conversa correta.');return;}
-const key=chatKey;b.disabled=true;notice('Baixando e decifrando…');
-try{const {data:blob,error:downloadError}=await supabase.storage.from('rai-connect-private').download(item.storage_path);if(downloadError)throw downloadError;
-const bytes=new Uint8Array(await blob.arrayBuffer());if(bytes.length<29)throw Error('Arquivo inválido');
-const decrypted=await crypto.subtle.decrypt({name:'AES-GCM',iv:bytes.slice(0,12),additionalData:new TextEncoder().encode(item.room_id+':'+item.sender_id)},key,bytes.slice(12));
-const url=URL.createObjectURL(new Blob([decrypted],{type:item.mime_type}));const a=document.createElement('a');a.href=url;a.download=item.file_name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);notice('Documento preparado para download.');
-}catch(e){notice('Não foi possível abrir o documento. Verifique a chave da conversa.');}finally{b.disabled=false;}
-};panel.append(b);}
-}
-browse.onclick=async()=>{menu.classList.add('hidden');panel.classList.toggle('hidden');if(!panel.classList.contains('hidden'))await loadFiles();};
-document.getElementById('close-chat')?.addEventListener('click',()=>{panel.classList.add('hidden');uploadPanel.classList.add('hidden');});
-};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup);else setup();
-})();
-</script><style>.conect-file-message{display:flex;flex-direction:column;gap:5px;max-width:85%;padding:12px 14px;margin:5px 16px;border-radius:16px;background:#173745;align-self:flex-start}.conect-file-message.mine{background:#075065;align-self:flex-end}.conect-file-message button{width:auto;margin:3px 0;padding:9px 12px;font-size:13px}.conect-file-message small{color:#b9cbd3}</style><script>
-(function(){
-let lastRoom='',lastCount=-1,busy=false;
-async function updateDocuments(){
-if(busy||!window.activeRoom||!window.supabase)return;
-const room=window.activeRoom,container=document.getElementById('messages');if(!container)return;
-busy=true;
-try{
-const {data,error}=await window.supabase.from('connect_attachments').select('id,room_id,sender_id,storage_path,file_name,mime_type,size_bytes,created_at').eq('room_id',room).order('created_at',{ascending:true}).limit(80);
-if(error)return;
-const old=[...container.querySelectorAll('.conect-file-message')];if(room!==lastRoom||lastCount!==(data||[]).length){old.forEach(x=>x.remove());lastRoom=room;lastCount=(data||[]).length;}
-for(const file of data||[]){
-if(document.getElementById('conect-file-'+file.id))continue;
-const item=document.createElement('div');item.className='conect-file-message'+(file.sender_id===window.chatUser?' mine':'');item.id='conect-file-'+file.id;
-const name=document.createElement('strong');name.textContent='📄 '+file.file_name;item.append(name);
-const meta=document.createElement('small');meta.textContent=Math.ceil(file.size_bytes/1024)+' KB · '+new Date(file.created_at).toLocaleString('pt-BR');item.append(meta);
-const open=document.createElement('button');open.type='button';open.textContent='⬇ Abrir / baixar documento';open.onclick=async()=>{
-open.disabled=true;open.textContent='Preparando download…';
-try{
-const key=window.chatKey;if(!key||window.activeRoom!==room)throw Error('Conversa indisponível');
-const {data:blob,error:downloadError}=await window.supabase.storage.from('rai-connect-private').download(file.storage_path);if(downloadError)throw downloadError;
-const bytes=new Uint8Array(await blob.arrayBuffer());
-const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:bytes.slice(0,12),additionalData:new TextEncoder().encode(file.room_id+':'+file.sender_id)},key,bytes.slice(12));
-const url=URL.createObjectURL(new Blob([plain],{type:file.mime_type}));
-const a=document.createElement('a');a.href=url;a.download=file.file_name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
-open.textContent='⬇ Abrir / baixar documento';
-}catch(e){open.textContent='Falha ao baixar · tentar novamente';}finally{open.disabled=false;}
-};item.append(open);container.append(item);
-}
-}catch(e){}finally{busy=false;}
-}
-setInterval(updateDocuments,4000);
-document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateDocuments();});
+const init=()=>{const header=document.querySelector('#chat-active .chat-header');if(!header)return;
+const btn=document.createElement('button');btn.type='button';btn.className='connect-call-btn';btn.title='Preparar videochamada';btn.setAttribute('aria-label','Preparar videochamada');btn.textContent='📹';header.insertBefore(btn,header.querySelector('#chat-tools'));
+const layer=document.createElement('section');layer.className='connect-call-layer';layer.hidden=true;
+const heading=document.createElement('h2');heading.textContent='Videochamada · R.A.I. Connect';
+const detail=document.createElement('p');detail.textContent='Teste de câmera e microfone. A ligação com outro participante ainda está em desenvolvimento.';
+const video=document.createElement('video');video.autoplay=true;video.muted=true;video.playsInline=true;
+const controls=document.createElement('div');const close=document.createElement('button');close.type='button';close.textContent='Encerrar prévia';const flip=document.createElement('button');flip.type='button';flip.textContent='Alternar câmera';controls.append(close,flip);layer.append(heading,detail,video,controls);document.body.append(layer);
+let stream=null,facing='user';
+async function stop(){if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}video.srcObject=null;layer.hidden=true;}
+async function start(){try{if(stream)stream.getTracks().forEach(t=>t.stop());stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:facing}},audio:true});video.srcObject=stream;detail.textContent='Câmera e microfone autorizados. Esta é apenas uma prévia local: ninguém está recebendo sua imagem.';}catch(e){detail.textContent='Não foi possível acessar câmera/microfone. Confira as permissões do navegador.';}}
+btn.onclick=async()=>{layer.hidden=false;await start();};close.onclick=stop;flip.onclick=async()=>{facing=facing==='user'?'environment':'user';await start();};document.addEventListener('visibilitychange',()=>{if(document.hidden&&stream)stop();});
+};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script></body></html>
