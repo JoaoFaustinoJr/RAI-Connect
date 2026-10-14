@@ -236,7 +236,7 @@ const path=room+'/'+user.id+'/'+crypto.randomUUID()+'.bin';
 notice('Enviando documento protegido…');progress.textContent='Enviando arquivo ao armazenamento privado…';
 const {error:uploadError}=await supabase.storage.from('rai-connect-private').upload(path,new Blob([bytes],{type:'application/octet-stream'}),{contentType:'application/octet-stream',upsert:false});if(uploadError)throw uploadError;progress.textContent='Registrando documento na conversa…';
 const {error:dbError}=await supabase.from('connect_attachments').insert({room_id:room,sender_id:user.id,storage_path:path,file_name:file.name.slice(0,255),mime_type:file.type||'application/octet-stream',size_bytes:file.size});if(dbError){await supabase.storage.from('rai-connect-private').remove([path]);throw dbError;}
-notice('Documento enviado. Abra Arquivos recebidos para visualizá-lo.');progress.textContent='✓ Documento enviado. Abra Arquivos recebidos.';if(current()===roomAtStart)await loadFiles();
+notice('Documento enviado à conversa.');progress.textContent='✓ Documento enviado à conversa.';panel.classList.add('hidden');if(current()===roomAtStart)await loadFiles();
 }catch(e){const detail=String(e?.message||'verifique a conexão e as permissões.');notice('Falha no envio do documento: '+detail);progress.textContent='Falha: '+detail;}finally{pick.disabled=false;}
 });
 async function loadFiles(){
@@ -257,5 +257,39 @@ const url=URL.createObjectURL(new Blob([decrypted],{type:item.mime_type}));const
 browse.onclick=async()=>{menu.classList.add('hidden');panel.classList.toggle('hidden');if(!panel.classList.contains('hidden'))await loadFiles();};
 document.getElementById('close-chat')?.addEventListener('click',()=>{panel.classList.add('hidden');uploadPanel.classList.add('hidden');});
 };if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup);else setup();
+})();
+</script><style>.conect-file-message{display:flex;flex-direction:column;gap:5px;max-width:85%;padding:12px 14px;margin:5px 16px;border-radius:16px;background:#173745;align-self:flex-start}.conect-file-message.mine{background:#075065;align-self:flex-end}.conect-file-message button{width:auto;margin:3px 0;padding:9px 12px;font-size:13px}.conect-file-message small{color:#b9cbd3}</style><script>
+(function(){
+let lastRoom='',lastCount=-1,busy=false;
+async function updateDocuments(){
+if(busy||!window.activeRoom||!window.supabase)return;
+const room=window.activeRoom,container=document.getElementById('messages');if(!container)return;
+busy=true;
+try{
+const {data,error}=await window.supabase.from('connect_attachments').select('id,room_id,sender_id,storage_path,file_name,mime_type,size_bytes,created_at').eq('room_id',room).order('created_at',{ascending:true}).limit(80);
+if(error)return;
+const old=[...container.querySelectorAll('.conect-file-message')];if(room!==lastRoom||lastCount!==(data||[]).length){old.forEach(x=>x.remove());lastRoom=room;lastCount=(data||[]).length;}
+for(const file of data||[]){
+if(document.getElementById('conect-file-'+file.id))continue;
+const item=document.createElement('div');item.className='conect-file-message'+(file.sender_id===window.chatUser?' mine':'');item.id='conect-file-'+file.id;
+const name=document.createElement('strong');name.textContent='📄 '+file.file_name;item.append(name);
+const meta=document.createElement('small');meta.textContent=Math.ceil(file.size_bytes/1024)+' KB · '+new Date(file.created_at).toLocaleString('pt-BR');item.append(meta);
+const open=document.createElement('button');open.type='button';open.textContent='⬇ Abrir / baixar documento';open.onclick=async()=>{
+open.disabled=true;open.textContent='Preparando download…';
+try{
+const key=window.chatKey;if(!key||window.activeRoom!==room)throw Error('Conversa indisponível');
+const {data:blob,error:downloadError}=await window.supabase.storage.from('rai-connect-private').download(file.storage_path);if(downloadError)throw downloadError;
+const bytes=new Uint8Array(await blob.arrayBuffer());
+const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:bytes.slice(0,12),additionalData:new TextEncoder().encode(file.room_id+':'+file.sender_id)},key,bytes.slice(12));
+const url=URL.createObjectURL(new Blob([plain],{type:file.mime_type}));
+const a=document.createElement('a');a.href=url;a.download=file.file_name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
+open.textContent='⬇ Abrir / baixar documento';
+}catch(e){open.textContent='Falha ao baixar · tentar novamente';}finally{open.disabled=false;}
+};item.append(open);container.append(item);
+}
+}catch(e){}finally{busy=false;}
+}
+setInterval(updateDocuments,4000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateDocuments();});
 })();
 </script></body></html>
