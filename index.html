@@ -223,4 +223,4 @@ async function start(){try{if(stream)stream.getTracks().forEach(t=>t.stop());str
 btn.onclick=async()=>{layer.hidden=false;await start();};close.onclick=stop;flip.onclick=async()=>{facing=facing==='user'?'environment':'user';await start();};document.addEventListener('visibilitychange',()=>{if(document.hidden&&stream)stop();});
 };if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
-</script></body></html>
+</script><script src="video-calls.js?v=1" defer></script></body></html>
