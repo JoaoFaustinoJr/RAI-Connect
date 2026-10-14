@@ -92,3 +92,14 @@ button:not(:disabled):active{filter:brightness(1.1);transform:scale(.98)}
 #messages>.bubble .message-actions{position:absolute!important;right:8px!important;bottom:7px!important;top:auto!important;left:auto!important;margin:0!important;z-index:2!important}
 #messages>.bubble .message-actions:not([open]){width:29px!important;height:24px!important;min-width:0!important}
 #messages>.bubble .message-actions[open]{z-index:6!important}
+
+/* Full-screen call experience */
+.connect-call-layer{background:radial-gradient(ellipse at 50% 10%,#194554,#061b26 70%)!important;padding:calc(28px + env(safe-area-inset-top)) 22px calc(28px + env(safe-area-inset-bottom))!important;align-items:stretch!important;gap:16px!important}
+.connect-call-layer h2{font-size:25px!important;font-weight:700!important;letter-spacing:.2px;color:#f6e5c1!important;margin:0!important}
+.connect-call-layer #call-phase{font-size:15px!important;color:#c0d3d9!important;min-height:36px;margin:0 0 4px!important}
+.connect-call-layer #call-remote{height:min(46dvh,410px)!important;max-height:none!important;width:100%!important;object-fit:cover!important;background:linear-gradient(150deg,#153541,#0c2633)!important;border:1px solid #c6a56a55!important;border-radius:23px!important}
+.connect-call-layer #call-local{width:110px!important;height:146px!important;max-height:none!important;object-fit:cover!important;border-radius:18px!important;border:2px solid #d7b576!important;box-shadow:0 8px 30px #0007!important}
+.connect-call-layer>div:last-child{display:flex!important;justify-content:center!important;flex-wrap:wrap!important;margin-top:10px}
+.connect-call-layer button{width:auto!important;min-width:108px!important;border-radius:999px!important;padding:13px 19px!important}
+.connect-call-layer #call-end,.connect-call-layer #call-decline{background:#6a3035!important;color:#fff!important}
+.connect-call-layer #call-answer{background:linear-gradient(130deg,#f6dc9a,#d5a65a)!important;color:#102631!important}
