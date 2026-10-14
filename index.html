@@ -42,6 +42,7 @@ const x1Incoming=new URL(location.href).searchParams.get('x1');if(x1Incoming&&/^
 function prepareX1Message(){if(!pendingX1||!activeRoom)return;document.getElementById('message-text').value='Vamos jogar Tangram X1? Entre na sala '+pendingX1+' pelo link https://joaofaustinojr.github.io/Html/tangram-x1/ — use o código '+pendingX1+'. Powered for R.A.I. - Conect';cs.textContent='Código do X1 preparado. Toque em enviar para compartilhar nesta conversa.';pendingX1='';sessionStorage.removeItem('conect-share-x1');}
 
 let chatUser=null,activeInfo=null,lastInfoRead=0,contactFilter='all',activeRoom=null,chatKey=null,chatEpoch=0,reading=false;
+Object.defineProperties(window,{activeRoom:{get:()=>activeRoom,configurable:true},chatKey:{get:()=>chatKey,configurable:true},chatUser:{get:()=>chatUser,configurable:true},supabase:{value:supabase,configurable:true}});
 const cs=document.getElementById('chat-status'),mh=document.getElementById('messages');
 const to64=b=>{let s='';for(let i=0;i<b.length;i+=8192)s+=String.fromCharCode(...b.subarray(i,i+8192));return btoa(s).replaceAll('+','-').replaceAll('/','_').replaceAll('=','');};
 const from64=s=>Uint8Array.from(atob(s.replaceAll('-','+').replaceAll('_','/')+'='.repeat((4-s.length%4)%4)),x=>x.charCodeAt(0));
