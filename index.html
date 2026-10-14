@@ -198,12 +198,12 @@ otpForm.addEventListener('submit',async(e)=>{e.preventDefault();if(!requestedEma
 document.getElementById('logout').addEventListener('click',async()=>{try{await disableClosedPush();}catch{}await supabase.auth.signOut();show(null);});
 </script><style>.conect-extra{display:flex;gap:8px;align-items:center;margin:8px 0}.conect-extra button{width:auto;margin:0;padding:9px 12px;font-size:12px}.conect-statuses{border:1px solid #42616b;border-radius:16px;padding:10px;margin:10px 0}.conect-statuses h3{font-size:14px;color:#f1cf8a;margin:0 0 8px}.conect-statuses article{padding:8px;border-bottom:1px solid #ffffff16;font-size:13px}.conect-statuses small{display:block;color:#91aab6}</style><script>
 (function(){
-const ready=()=>{const hub=document.getElementById('hub'),head=hub?.querySelector('.hub-heading'),chat=document.querySelector('.chat-header');if(!head||!chat||!window.supabase)return;
+const ready=()=>{const hub=document.getElementById('hub'),head=hub?.querySelector('.hub-heading'),chat=document.querySelector('.chat-header');if(!head||!chat||typeof supabase==='undefined')return;
 const area=document.createElement('section');area.className='conect-statuses';area.innerHTML='<h3>✦ Momentos · 24 horas</h3><div id="conect-status-list">Carregando…</div><div class="conect-extra"><button type="button" id="conect-post-status">+ Publicar texto</button><button type="button" id="conect-refresh-status" class="secondary">Atualizar</button></div>';head.after(area);
 const roomSelect=()=>{const rooms=[...document.querySelectorAll('#saved-conversations [data-room]')].map(e=>e.dataset.room);return rooms;};
 async function load(){const out=document.getElementById('conect-status-list');const {data,error}=await supabase.from('connect_statuses').select('id,content,created_at,expires_at').gt('expires_at',new Date().toISOString()).order('created_at',{ascending:false}).limit(20);out.replaceChildren();if(error){out.textContent='Momentos indisponíveis.';return;}if(!data?.length){out.textContent='Nenhum momento publicado.';return;}for(const item of data){const el=document.createElement('article');el.textContent=item.content||'Momento compartilhado';const t=document.createElement('small');t.textContent='Disponível até '+new Date(item.expires_at).toLocaleString('pt-BR');el.append(t);out.append(el);}}
 document.getElementById('conect-refresh-status').onclick=load;
-document.getElementById('conect-post-status').onclick=async()=>{const room=window.activeRoom||null;if(!room){alert('Abra uma conversa ou grupo antes de publicar um momento.');return;}const content=prompt('Seu momento (visível aos participantes desta conversa por 24 horas):');if(!content?.trim())return;const {data:{user}}=await supabase.auth.getUser();if(!user)return;const {error}=await supabase.from('connect_statuses').insert({author_id:user.id,room_id:room,kind:'text',content:content.trim().slice(0,1000)});if(error)alert('Não foi possível publicar.');else load();};
+document.getElementById('conect-post-status').onclick=async()=>{const room=typeof activeRoom!=='undefined'?activeRoom:null;if(!room){alert('Abra uma conversa ou grupo antes de publicar um momento.');return;}const content=prompt('Seu momento (visível aos participantes desta conversa por 24 horas):');if(!content?.trim())return;const {data:{user}}=await supabase.auth.getUser();if(!user)return;const {error}=await supabase.from('connect_statuses').insert({author_id:user.id,room_id:room,kind:'text',content:content.trim().slice(0,1000)});if(error)alert('Não foi possível publicar.');else load();};
 load();
 };if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ready);else ready();
 })();
@@ -214,12 +214,12 @@ const menu=document.getElementById('attachment-options'),chat=document.getElemen
 const pick=document.createElement('button');pick.type='button';pick.className='secondary';pick.textContent='📄 Documento / PDF';
 const browse=document.createElement('button');browse.type='button';browse.className='secondary';browse.textContent='📁 Arquivos recebidos';
 const input=document.createElement('input');input.type='file';input.id='conect-document-file';input.accept='.pdf,.doc,.docx,.txt,.odt,.xls,.xlsx,.ppt,.pptx,.csv,application/pdf';
-menu.append(pick,browse,input);
+menu.append(pick,browse);chat.append(input);
 const panel=document.createElement('div');panel.id='conect-files-panel';panel.className='hidden';form.before(panel);
 const notice=t=>{const el=document.getElementById('chat-status');if(el)el.textContent=t;};
 const allowed=/\.(pdf|doc|docx|txt|odt|xls|xlsx|ppt|pptx|csv)$/i;
 const current=()=>typeof activeRoom!=='undefined'?activeRoom:null;
-pick.onclick=()=>{if(!current()){notice('Abra uma conversa primeiro.');return;}menu.classList.add('hidden');input.click();};
+pick.onclick=()=>{if(!current()){notice('Abra uma conversa primeiro.');return;}input.click();menu.classList.add('hidden');};
 input.onchange=async()=>{
 const file=input.files?.[0],room=current();input.value='';if(!file||!room)return;
 if(!allowed.test(file.name)||file.size>20*1024*1024||!file.size){notice('Escolha um documento de até 20 MB.');return;}
@@ -236,7 +236,7 @@ notice('Enviando documento protegido…');
 const {error:uploadError}=await supabase.storage.from('rai-connect-private').upload(path,new Blob([bytes],{type:'application/octet-stream'}),{contentType:'application/octet-stream',upsert:false});if(uploadError)throw uploadError;
 const {error:dbError}=await supabase.from('connect_attachments').insert({room_id:room,sender_id:user.id,storage_path:path,file_name:file.name.slice(0,255),mime_type:file.type||'application/octet-stream',size_bytes:file.size});if(dbError){await supabase.storage.from('rai-connect-private').remove([path]);throw dbError;}
 notice('Documento enviado. Abra Arquivos recebidos para visualizá-lo.');if(current()===roomAtStart)await loadFiles();
-}catch(e){notice('Falha no envio do documento. '+(e?.message||''));}finally{pick.disabled=false;}
+}catch(e){notice('Falha no envio do documento: '+(e?.message||'verifique a conexão e as permissões.'));}finally{pick.disabled=false;}
 };
 async function loadFiles(){
 const room=current();if(!room)return;panel.replaceChildren();const title=document.createElement('p');title.textContent='Documentos da conversa';panel.append(title);
