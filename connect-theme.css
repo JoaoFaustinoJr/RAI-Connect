@@ -175,3 +175,12 @@ button:not(:disabled):active{filter:brightness(1.1);transform:scale(.98)}
 .connect-emoji-grid button.unicode-emoji{min-height:52px;font-size:29px}
 .connect-bird-message{display:block;width:150px;max-width:100%;height:auto;aspect-ratio:4/3;object-fit:contain}
 @media(min-width:600px){.connect-emoji-grid{grid-template-columns:repeat(6,minmax(0,1fr))}}
+
+/* Compact refined sticker gallery */
+#connect-emoji-panel{max-height:min(38dvh,310px);padding:10px 12px;scrollbar-width:thin;overscroll-behavior:contain}
+#connect-emoji-panel header{position:sticky;top:-10px;background:#102d39;z-index:2;padding:8px 0}
+#connect-emoji-panel nav{position:sticky;top:29px;background:#102d39;z-index:2;padding:4px 0 9px}
+.connect-emoji-grid{gap:9px}
+.connect-emoji-grid button{border-color:#caa86944;background:linear-gradient(145deg,#1b414d,#102f3c);box-shadow:inset 0 1px #ffffff0d,0 2px 6px #0002;border-radius:15px}
+.connect-emoji-grid button img{filter:drop-shadow(0 2px 2px #00182055)}
+.connect-emoji-grid button:active{transform:scale(.96)}
