@@ -150,3 +150,11 @@ button:not(:disabled):active{filter:brightness(1.1);transform:scale(.98)}
 #rai-rename-overlay button{padding:12px 15px!important;border-radius:11px!important;font-size:14px!important}
 #rai-rename-overlay button[type=submit]{background:#eac47c!important;color:#112d38!important;font-weight:700!important}
 #rai-rename-overlay .rai-rename-feedback{color:#ffb7a9!important;margin:0!important;font-size:13px!important}
+
+/* Audio calling and verified message reads */
+.connect-audio-btn{width:46px;height:46px;min-width:46px;display:grid;place-items:center;border-radius:50%;border:1px solid #d7b879;background:linear-gradient(145deg,#224754,#102f3c);color:#f2d18c;cursor:pointer;padding:0;margin:0 5px}
+.connect-audio-btn svg{display:block}
+.connect-call-layer.audio-only #call-remote,.connect-call-layer.audio-only #call-local{display:none!important}
+.connect-call-layer.audio-only:before{content:"♫";font-size:90px;color:#e9c57e;text-align:center;display:grid;place-items:center;width:min(66vw,280px);height:min(66vw,280px);margin:20px auto;border-radius:50%;background:radial-gradient(circle,#214d5b,#102d3a);border:2px solid #d7b87977}
+.connect-read-indicator{font-size:13px;letter-spacing:-3px;padding-left:4px;color:#a7bdc4;font-weight:700}
+.connect-read-indicator.is-read{color:#f0c879}
