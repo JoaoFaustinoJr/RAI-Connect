@@ -117,3 +117,15 @@ button:not(:disabled):active{filter:brightness(1.1);transform:scale(.98)}
 .chat-card>details .contact-edit-name{width:100%!important;height:auto!important;min-height:42px!important;display:flex!important;justify-content:flex-start!important;gap:9px!important;padding:10px 12px!important;border-radius:10px!important;font-size:13px!important;font-weight:600!important;white-space:normal}
 .chat-card>details .contact-edit-name:after{content:" Editar nome";font-size:13px}
 .chat-card .contact-rename-form{flex-basis:100%;order:10;background:#12323f;border:1px solid #d6b77b55;border-radius:12px;padding:10px;margin-top:6px}
+
+/* Contact overflow menu: edit primary, delete quiet and last */
+.chat-card>details{position:relative!important;flex:0 0 34px!important;min-width:34px!important}
+.chat-card>details>summary{display:grid!important;place-items:center!important;min-height:40px!important;cursor:pointer}
+.chat-card>details[open]{z-index:30!important}
+.chat-card>details[open]>button,.chat-card>details[open]>.other-conversations{position:relative!important;display:flex!important;align-items:center!important;justify-content:flex-start!important;width:100%!important;min-width:0!important;box-sizing:border-box!important;white-space:normal!important;text-align:left!important;box-shadow:none!important;margin:0!important;transform:none!important}
+.chat-card>details[open]{min-width:210px!important;max-width:min(260px,75vw)!important;padding:5px!important;border:1px solid #bba06b66!important;border-radius:13px!important;background:#102c39!important;box-shadow:0 10px 26px #0008!important}
+.chat-card>details[open]>summary{width:35px!important;min-height:31px!important;margin-left:auto!important}
+.chat-card>details[open]>.contact-edit-name{order:1!important;min-height:43px!important;border:0!important;background:#244653!important;color:#f2d18d!important;font-size:14px!important}
+.chat-card>details[open]>.other-conversations{order:2!important;padding:8px!important;color:#d0dfe4!important}
+.chat-card>details[open]>.contact-delete-action{order:3!important;min-height:38px!important;border:0!important;border-top:1px solid #ffffff22!important;border-radius:0!important;background:transparent!important;color:#b7c6cb!important;font-size:12px!important;font-weight:400!important;padding:10px 12px!important}
+.chat-card>details[open]>.contact-delete-action:active{color:#ffb3ac!important}
