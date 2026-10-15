@@ -158,3 +158,20 @@ button:not(:disabled):active{filter:brightness(1.1);transform:scale(.98)}
 .connect-call-layer.audio-only:before{content:"♫";font-size:90px;color:#e9c57e;text-align:center;display:grid;place-items:center;width:min(66vw,280px);height:min(66vw,280px);margin:20px auto;border-radius:50%;background:radial-gradient(circle,#214d5b,#102d3a);border:2px solid #d7b87977}
 .connect-read-indicator{font-size:13px;letter-spacing:-3px;padding-left:4px;color:#a7bdc4;font-weight:700}
 .connect-read-indicator.is-read{color:#f0c879}
+
+/* Connect hummingbird sticker and emoji tray */
+#connect-emoji-button{flex:0 0 38px;min-width:38px;height:42px;border-radius:50%;border:1px solid #e6c78070;background:#143441;color:#f2d18c;font-size:26px;padding:0;display:grid;place-items:center}
+#connect-emoji-panel{position:relative;z-index:10;background:#102d39;border:1px solid #d8b77a88;border-radius:18px 18px 0 0;padding:12px;max-height:min(49dvh,380px);overflow:auto;box-shadow:0 -8px 25px #0006}
+#connect-emoji-panel[hidden]{display:none!important}
+#connect-emoji-panel header{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#f3d28d;margin-bottom:10px}
+#connect-emoji-panel header button{background:transparent;color:#e5d8c1;border:0;font-size:26px;padding:0 8px}
+#connect-emoji-panel nav{display:flex;gap:8px;margin-bottom:10px}
+#connect-emoji-panel nav button{background:#1a3c49;color:#c4d1d5;border:1px solid #ffffff26;border-radius:12px;padding:9px 13px;font-size:13px}
+#connect-emoji-panel nav button.selected{color:#102b36;background:#e6c37e}
+.connect-emoji-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+.connect-emoji-grid button{min-width:0;min-height:76px;border:1px solid #ffffff20;background:#173a47;border-radius:12px;padding:5px;color:#e6edf0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.connect-emoji-grid button img{display:block;width:100%;max-width:74px;height:53px;object-fit:contain}
+.connect-emoji-grid button span{font-size:10px;line-height:1.1;text-align:center}
+.connect-emoji-grid button.unicode-emoji{min-height:52px;font-size:29px}
+.connect-bird-message{display:block;width:150px;max-width:100%;height:auto;aspect-ratio:4/3;object-fit:contain}
+@media(min-width:600px){.connect-emoji-grid{grid-template-columns:repeat(6,minmax(0,1fr))}}
