@@ -103,3 +103,10 @@ button:not(:disabled):active{filter:brightness(1.1);transform:scale(.98)}
 .connect-call-layer button{width:auto!important;min-width:108px!important;border-radius:999px!important;padding:13px 19px!important}
 .connect-call-layer #call-end,.connect-call-layer #call-decline{background:#6a3035!important;color:#fff!important}
 .connect-call-layer #call-answer{background:linear-gradient(130deg,#f6dc9a,#d5a65a)!important;color:#102631!important}
+
+/* Contact editing: visible action and inline form on mobile */
+.chat-card{flex-wrap:wrap}
+.chat-card .contact-edit-name{flex:0 0 34px;min-width:34px;width:34px;height:38px;border:1px solid #b89a5e66;border-radius:11px;background:#143642;color:#f2d28d;font-size:21px;padding:0;display:grid;place-items:center}
+.chat-card .contact-rename-form{flex:1 0 100%;width:100%;display:flex;gap:7px;align-items:center;padding:10px 0 5px;box-sizing:border-box}
+.chat-card .contact-rename-form input{flex:1;min-width:0;padding:11px 10px;border-radius:10px;background:#163a48;color:#fff;border:1px solid #d9b87988;font-size:16px}
+.chat-card .contact-rename-form button{padding:10px 9px;border-radius:10px;white-space:nowrap;font-size:12px}
