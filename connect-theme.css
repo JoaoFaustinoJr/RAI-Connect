@@ -139,3 +139,14 @@ button:not(:disabled):active{filter:brightness(1.1);transform:scale(.98)}
 .chat-card>.contact-menu[open]>.contact-delete-action{position:absolute!important;right:0!important;top:88px!important;display:block!important;width:210px!important;min-width:210px!important;max-width:min(210px,78vw)!important;min-height:40px!important;padding:10px 12px!important;margin:0!important;border:1px solid #c2a26955!important;border-top:0!important;border-radius:0 0 12px 12px!important;background:#14323f!important;color:#aebfc5!important;z-index:51!important;font-size:12px!important;box-shadow:0 10px 22px #0007!important}
 .chat-card>.contact-menu[open]>.other-conversations{position:absolute!important;right:0!important;top:88px!important;width:210px!important;background:#173947!important;z-index:52!important}
 .chat-card .contact-rename-form{position:relative!important;z-index:4!important}
+
+/* Rename dialog independent from contact list refresh and overflow */
+#rai-rename-overlay{position:fixed!important;inset:0!important;z-index:999999!important;background:#03131bdc!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:20px!important;box-sizing:border-box!important}
+#rai-rename-overlay .rai-rename-panel{width:min(420px,100%)!important;max-height:90dvh!important;overflow:auto!important;box-sizing:border-box!important;background:#10313f!important;border:1px solid #d7b67999!important;border-radius:20px!important;padding:23px!important;box-shadow:0 18px 65px #000a!important;display:flex!important;flex-direction:column!important;gap:14px!important}
+#rai-rename-overlay h3{color:#f5d998!important;font-size:22px!important;margin:0!important}
+#rai-rename-overlay label{color:#d5e3e7!important;font-size:14px!important}
+#rai-rename-overlay input{width:100%!important;box-sizing:border-box!important;padding:14px!important;border-radius:11px!important;border:1px solid #d7b679!important;background:#173f4c!important;color:white!important;font-size:18px!important}
+#rai-rename-overlay .rai-rename-actions{display:flex!important;gap:10px!important;justify-content:flex-end!important}
+#rai-rename-overlay button{padding:12px 15px!important;border-radius:11px!important;font-size:14px!important}
+#rai-rename-overlay button[type=submit]{background:#eac47c!important;color:#112d38!important;font-weight:700!important}
+#rai-rename-overlay .rai-rename-feedback{color:#ffb7a9!important;margin:0!important;font-size:13px!important}
