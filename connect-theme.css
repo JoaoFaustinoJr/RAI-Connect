@@ -189,3 +189,10 @@ button:not(:disabled):active{filter:brightness(1.1);transform:scale(.98)}
 #connect-emoji-panel .unicode-emoji{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:5px!important;min-height:78px!important;padding:8px 5px!important;white-space:normal!important;text-align:center!important}
 #connect-emoji-panel .connect-emoji-symbol{font-size:27px;line-height:1.15}
 #connect-emoji-panel .connect-emoji-caption{font-size:10px;line-height:1.25;font-weight:650;color:#f5e3b5;overflow-wrap:anywhere}
+
+/* Sticker caption and independent visual zones (Oct 2026) */
+.connect-bird-figure{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;margin:0;padding:3px 2px 4px;max-width:100%;min-width:0}
+.connect-bird-figure .connect-bird-message{display:block;width:195px;max-width:100%;height:auto;aspect-ratio:210/145;object-fit:contain}
+.connect-bird-caption{font-size:13px;font-weight:750;line-height:1.25;text-align:center;color:#ffe0a0;letter-spacing:.01em;max-width:100%;overflow-wrap:anywhere}
+#connect-emoji-panel .connect-emoji-grid button img{max-width:86px;height:62px}
+#connect-emoji-panel .connect-emoji-grid button span{font-size:11px;line-height:1.2;font-weight:650;color:#f4dfb0}
