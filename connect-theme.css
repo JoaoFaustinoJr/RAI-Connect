@@ -208,3 +208,7 @@ button:not(:disabled):active{filter:brightness(1.1);transform:scale(.98)}
 /* Prominent, non-intrusive notification onboarding */
 .connect-push-prompt{display:grid;grid-template-columns:1fr auto;gap:10px 13px;align-items:center;border:1px solid #d7b875;border-radius:15px;padding:13px 15px;margin:12px 0 16px;background:linear-gradient(115deg,#193d4a,#15303f);box-shadow:0 7px 20px #0004}
 .connect-push-prompt strong{color:#f6d99d;font-size:15px}.connect-push-prompt p{color:#d1e3e8;font-size:12px;line-height:1.45;margin:5px 0 0}.connect-push-prompt button{width:auto!important;margin:0!important;padding:10px 12px!important;white-space:nowrap;background:#edcc84!important;color:#123341!important;font-weight:850!important}.connect-push-prompt small{grid-column:1/-1;color:#c5e5e6;line-height:1.5}.connect-push-prompt small:empty{display:none}.connect-push-prompt.configured{border-color:#679b99;background:#123443}.bubble time{font-variant-numeric:tabular-nums;white-space:nowrap;font-size:11px;opacity:.84}@media(max-width:430px){.connect-push-prompt{grid-template-columns:1fr}.connect-push-prompt button{justify-self:start}}
+
+/* Leave enough room for the fixed bottom navigation on mobile */
+#hub{padding-bottom:calc(125px + env(safe-area-inset-bottom,0px))!important}
+.connect-push-prompt{scroll-margin-bottom:160px}
