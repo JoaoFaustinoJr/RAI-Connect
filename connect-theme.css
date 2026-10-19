@@ -204,3 +204,7 @@ button:not(:disabled):active{filter:brightness(1.1);transform:scale(.98)}
 .connect-reaction-counts:empty{display:none}
 .connect-reaction-counts button{width:auto!important;min-width:30px!important;min-height:27px!important;padding:3px 7px!important;border:1px solid #e5c68280!important;border-radius:20px!important;background:#174b59!important;color:#fff!important;font-size:16px!important;line-height:1.2!important}
 .message-actions summary{cursor:pointer;touch-action:manipulation}
+
+/* Prominent, non-intrusive notification onboarding */
+.connect-push-prompt{display:grid;grid-template-columns:1fr auto;gap:10px 13px;align-items:center;border:1px solid #d7b875;border-radius:15px;padding:13px 15px;margin:12px 0 16px;background:linear-gradient(115deg,#193d4a,#15303f);box-shadow:0 7px 20px #0004}
+.connect-push-prompt strong{color:#f6d99d;font-size:15px}.connect-push-prompt p{color:#d1e3e8;font-size:12px;line-height:1.45;margin:5px 0 0}.connect-push-prompt button{width:auto!important;margin:0!important;padding:10px 12px!important;white-space:nowrap;background:#edcc84!important;color:#123341!important;font-weight:850!important}.connect-push-prompt small{grid-column:1/-1;color:#c5e5e6;line-height:1.5}.connect-push-prompt small:empty{display:none}.connect-push-prompt.configured{border-color:#679b99;background:#123443}.bubble time{font-variant-numeric:tabular-nums;white-space:nowrap;font-size:11px;opacity:.84}@media(max-width:430px){.connect-push-prompt{grid-template-columns:1fr}.connect-push-prompt button{justify-self:start}}
