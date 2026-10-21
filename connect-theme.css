@@ -212,3 +212,12 @@ button:not(:disabled):active{filter:brightness(1.1);transform:scale(.98)}
 /* Leave enough room for the fixed bottom navigation on mobile */
 #hub{padding-bottom:calc(125px + env(safe-area-inset-bottom,0px))!important}
 .connect-push-prompt{scroll-margin-bottom:160px}
+
+/* Sticker composition and legibility refinement */
+.connect-bird-figure{gap:5px!important;max-width:100%;}
+.connect-bird-figure .connect-bird-message{width:210px!important;max-width:100%!important;aspect-ratio:165/125!important;}
+.connect-bird-caption{font-size:17px!important;line-height:1.35!important;font-weight:800!important;color:#ffe7b4!important;letter-spacing:.015em!important;}
+#connect-emoji-panel .connect-emoji-grid button{min-height:94px!important;gap:5px!important;}
+#connect-emoji-panel .connect-emoji-grid button img{max-width:95px!important;height:68px!important;}
+#connect-emoji-panel .connect-emoji-grid button span{font-size:13px!important;line-height:1.22!important;font-weight:750!important;}
+@media(max-width:430px){#connect-emoji-panel .connect-emoji-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;}}
