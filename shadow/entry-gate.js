@@ -22,7 +22,7 @@ export function installShadowEntry({bird, isAuthorized, onOpen, onError = () => 
     busy = true;
     try {
       // No modal, toast, or visible indicator for unauthorized users.
-      if (await isAuthorized() && !disposed) await onOpen();
+      if (await isAuthorized() && !disposed && !document.hidden) await onOpen();
     } catch (error) {
       onError(error);
     } finally {
@@ -30,12 +30,13 @@ export function installShadowEntry({bird, isAuthorized, onOpen, onError = () => 
     }
   }
   function reset() { taps = 0; lastTap = 0; }
+  function onVisibilityChange() { if (document.hidden) reset(); }
   bird.addEventListener('click', handleTap);
-  document.addEventListener('visibilitychange', reset);
+  document.addEventListener('visibilitychange', onVisibilityChange);
   return () => {
     disposed = true;
     bird.removeEventListener('click', handleTap);
-    document.removeEventListener('visibilitychange', reset);
+    document.removeEventListener('visibilitychange', onVisibilityChange);
   };
 }
 
