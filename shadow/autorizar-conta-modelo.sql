@@ -1,0 +1,20 @@
+-- RAI Shadow — habilitação controlada, SOMENTE após confirmar identidade.
+-- NÃO executar com valor de exemplo. NÃO usar e-mail, apelido ou nome para identificar.
+-- Substitua o UUID abaixo pelo auth.users.id obtido da sessão autenticada
+-- no aplicativo Connect experimental, após confirmação pelo proprietário.
+-- Esta operação deve ser executada apenas pelo administrador no SQL Editor.
+--
+-- begin;
+-- insert into public.shadow_members (user_id, enabled)
+-- select id, true from auth.users where id = 'COLE_AQUI_UUID_CONFIRMADO'::uuid
+-- on conflict (user_id) do update set enabled = excluded.enabled;
+-- select user_id, enabled from public.shadow_members
+-- where user_id = 'COLE_AQUI_UUID_CONFIRMADO'::uuid;
+-- commit;
+--
+-- REVOGAÇÃO (somente após confirmação do UUID):
+-- update public.shadow_members set enabled = false
+-- where user_id = 'COLE_AQUI_UUID_CONFIRMADO'::uuid;
+--
+-- Nota: habilitar membro NÃO torna PIN, criptografia ou mensagens prontos.
+-- Nunca publicar UUIDs, tokens, senhas ou PINs no GitHub.
