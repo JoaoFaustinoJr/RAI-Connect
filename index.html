@@ -48,10 +48,11 @@ import('./shadow/entry-gate.js').then(({installShadowEntry,shadowMemberEnabled})
    Object.assign(frame.style,{width:'100%',flex:'1',border:'0'});
    let closed=false;
    let authSubscription;
-   const exit=()=>{if(closed)return;closed=true;document.removeEventListener('visibilitychange',hidden);authSubscription?.unsubscribe();frame.src='about:blank';overlay.remove();};
+   const exit=()=>{if(closed)return;closed=true;document.removeEventListener('visibilitychange',hidden);window.removeEventListener('pagehide',exit);authSubscription?.unsubscribe();frame.src='about:blank';overlay.remove();};
    close.addEventListener('click',exit);
    const hidden=()=>{if(document.hidden)exit();};
    document.addEventListener('visibilitychange',hidden);
+   window.addEventListener('pagehide',exit);
    const {data:authListener}=supabase.auth.onAuthStateChange(event=>{if(event==='SIGNED_OUT'||event==='USER_DELETED')exit();});
    authSubscription=authListener?.subscription;
    overlay.append(close,frame);document.body.append(overlay);
