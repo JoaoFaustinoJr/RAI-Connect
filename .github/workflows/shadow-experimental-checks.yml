@@ -28,3 +28,22 @@ jobs:
             exit 1
           fi
           echo 'Static Shadow checks passed (not a security audit).'
+      - name: Prepare isolated preview bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p preview/RAI-Connect-Shadow/shadow
+          cp index.html preview/RAI-Connect-Shadow/index.html
+          cp shadow/entry-gate.js shadow/prototipo.html preview/RAI-Connect-Shadow/shadow/
+          cat > preview/RAI-Connect-Shadow/LEIA-PRIMEIRO.txt <<'EOF'
+          RAI Shadow — pacote experimental, não é um endereço publicado.
+          Para testar integração com Supabase é obrigatório servidor HTTPS.
+          Não enviar mensagens reais nem usar PIN pessoal nesta demonstração.
+          O Connect original permanece na ramificação principal.
+          EOF
+      - name: Save experimental preview artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rai-shadow-preview-experimental
+          path: preview/RAI-Connect-Shadow/
+          retention-days: 7
