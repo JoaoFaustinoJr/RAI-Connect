@@ -50,6 +50,10 @@ document.fire('visibilitychange');
 document.hidden = false;
 await sequence(bird, 3);
 assert.equal(opened, 1, 'background reset prevents partial sequence reuse');
+// Reset the partial sequence before beginning a separate pagehide scenario.
+document.hidden = true;
+document.fire('visibilitychange');
+document.hidden = false;
 await sequence(bird, 2);
 window.fire('pagehide');
 await sequence(bird, 3);
