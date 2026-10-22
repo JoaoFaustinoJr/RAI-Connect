@@ -33,3 +33,4 @@ const dispose=installShadowEntry({bird,isAuthorized:()=>new Promise(r=>{resolveA
 for(let i=0;i<5;i++){now+=100;const pending=bird.fire('click',{isTrusted:true});if(i===4){dispose();resolveAuth(true);await pending;}else await pending;}
 assert.equal(opened,0,'disposed gate must not open after delayed authorization');
 console.log('PASS: disposal cancels pending opening');
+
