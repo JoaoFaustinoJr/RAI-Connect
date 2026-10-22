@@ -6,7 +6,7 @@
 <section id="entry"><button class="bird" id="bird" aria-label="Beija-flor, entrada de demonstração">✧</button><h1>RAI CONNECT</h1><p>Prévia pública isolada: toque cinco vezes no símbolo acima. Não use senhas reais.</p></section>
 <section id="lock"><div style="font-size:55px" aria-hidden="true">✦</div><h1>RAI SHADOW</h1><p id="prompt">Crie um PIN de seis dígitos para esta demonstração.</p><div class="dots" id="dots" aria-label="Dígitos digitados"></div><div class="keys" id="keys"></div><p id="status" role="status"></p><button class="action" id="back">Voltar ao Connect</button></section>
 <section id="room"><div style="font-size:55px" aria-hidden="true">✦</div><h1>RAI SHADOW</h1><p>Ambiente de demonstração desbloqueado.</p><p>Sem mensagens reais, sem conexão com o Supabase e sem notificações.</p><button class="action" id="exit">Bloquear e sair</button></section>
-<p class="note">PROTÓTIPO VISUAL — o PIN fica somente na memória temporária da página. Não use um PIN verdadeiro.</p>
+<p class="note">DEMONSTRAÇÃO PÚBLICA — não há autenticação real nem conversas privadas. O PIN fica somente na memória temporária da página. Não use um PIN verdadeiro.</p>
 </main><script>
 (()=>{let taps=0,timer,pin=null,first=null,typed='',fail=0,lockedUntil=0;
 const $=id=>document.getElementById(id),show=id=>{for(const s of ['entry','lock','room'])$(s).style.display=s===id?'block':'none';};
@@ -18,9 +18,10 @@ if(!pin&&!first){first=typed;reset();$('prompt').textContent='Confirme o PIN de 
 if(!pin){if(typed===first){pin=typed;first=null;show('room');}else{first=null;reset();open();$('status').textContent='PINs diferentes. Comece novamente.';}return;}
 if(typed===pin){fail=0;show('room');}else{fail++;reset();$('status').textContent='PIN incorreto.';if(fail>=3){lockedUntil=Date.now()+30000;fail=0;$('status').textContent='Três tentativas incorretas. Aguarde 30 segundos.';}}}
 for(const n of ['1','2','3','4','5','6','7','8','9','','0','del']){const b=document.createElement('button');b.textContent=n==='del'?'⌫':n;b.disabled=n==='';b.setAttribute('aria-label',n==='del'?'Apagar':n);b.addEventListener('click',()=>digit(n));$('keys').append(b);}
-$('bird').addEventListener('click',()=>{clearTimeout(timer);taps++;if(taps>=5){taps=0;open();return;}timer=setTimeout(()=>taps=0,2500);});
+$('bird').addEventListener('click',(event)=>{if(!event.isTrusted)return;clearTimeout(timer);taps++;if(taps>=5){taps=0;open();return;}timer=setTimeout(()=>taps=0,800);});
 $('back').addEventListener('click',()=>{reset();show('entry');});$('exit').addEventListener('click',()=>{reset();show('entry');});
-document.addEventListener('visibilitychange',()=>{if(document.hidden){reset();show('entry');}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){clearTimeout(timer);taps=0;first=null;reset();show('entry');}});
+window.addEventListener('pagehide',()=>{clearTimeout(timer);taps=0;first=null;reset();show('entry');});
 dots();if(new URLSearchParams(location.search).get('embed')==='1')open();else show('entry');
 })();
 </script></body></html>
