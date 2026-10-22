@@ -21,6 +21,6 @@ for(const n of ['1','2','3','4','5','6','7','8','9','','0','del']){const b=docum
 $('bird').addEventListener('click',()=>{clearTimeout(timer);taps++;if(taps>=5){taps=0;open();return;}timer=setTimeout(()=>taps=0,2500);});
 $('back').addEventListener('click',()=>{reset();show('entry');});$('exit').addEventListener('click',()=>{reset();show('entry');});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&$('room').style.display==='block'){reset();show('entry');}});
-dots();show('entry');
+dots();if(new URLSearchParams(location.search).get('embed')==='1')open();else show('entry');
 })();
 </script></body></html>
