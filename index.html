@@ -44,7 +44,7 @@ import('./shadow/entry-gate.js').then(({installShadowEntry,shadowMemberEnabled})
    const close=document.createElement('button');close.textContent='← Voltar ao Connect';close.setAttribute('aria-label','Fechar Shadow');
    Object.assign(close.style,{background:'#15110a',color:'#e3bf77',border:'1px solid #65502b',padding:'16px',fontSize:'16px'});
    const frame=document.createElement('iframe');frame.src='./shadow/prototipo.html?embed=1';frame.title='RAI Shadow — demonstração';
-   frame.setAttribute('sandbox','allow-scripts allow-same-origin');
+   frame.setAttribute('sandbox','allow-scripts');
    Object.assign(frame.style,{width:'100%',flex:'1',border:'0'});
    const exit=()=>{document.removeEventListener('visibilitychange',hidden);frame.src='about:blank';overlay.remove();};
    close.addEventListener('click',exit);
