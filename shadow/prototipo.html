@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#050505"><title>RAI Shadow — Protótipo local</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100dvh;background:#050505;color:#e9d5a4;font:16px system-ui,sans-serif;display:grid;place-items:center}main{width:min(100%,420px);padding:32px 24px;text-align:center}.bird{border:0;background:none;color:#d6ad59;font-size:72px;cursor:pointer;touch-action:manipulation;filter:drop-shadow(0 0 14px #8a651b66)}h1{font-size:24px;letter-spacing:.24em;font-weight:500}p{color:#b4a98f;font-size:14px;line-height:1.5}.dots{display:flex;gap:13px;justify-content:center;margin:28px 0}.dot{width:12px;height:12px;border:1px solid #bc9652;border-radius:50%}.dot.on{background:#e2bb71}.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:270px;margin:auto}.keys button,.action{border:1px solid #5a4628;background:#18130c;color:#f0d498;border-radius:14px;min-height:58px;font-size:22px;cursor:pointer}.action{font-size:14px;padding:12px 18px;margin-top:20px}#lock,#room{display:none}.note{font-size:12px;color:#a49b8c;margin-top:30px}.hidden{display:none!important}#status{min-height:22px}
+</style></head><body><main>
+<section id="entry"><button class="bird" id="bird" aria-label="Beija-flor, entrada de demonstração">✧</button><h1>RAI CONNECT</h1><p>Protótipo de demonstração: toque cinco vezes no símbolo acima.</p></section>
+<section id="lock"><div style="font-size:55px" aria-hidden="true">✦</div><h1>RAI SHADOW</h1><p id="prompt">Crie um PIN de seis dígitos para esta demonstração.</p><div class="dots" id="dots" aria-label="Dígitos digitados"></div><div class="keys" id="keys"></div><p id="status" role="status"></p><button class="action" id="back">Voltar ao Connect</button></section>
+<section id="room"><div style="font-size:55px" aria-hidden="true">✦</div><h1>RAI SHADOW</h1><p>Ambiente de demonstração desbloqueado.</p><p>Sem mensagens reais, sem conexão com o Supabase e sem notificações.</p><button class="action" id="exit">Bloquear e sair</button></section>
+<p class="note">PROTÓTIPO VISUAL — o PIN fica somente na memória temporária da página. Não use um PIN verdadeiro.</p>
+</main><script>
+(()=>{let taps=0,timer,pin=null,first=null,typed='',fail=0,lockedUntil=0;
+const $=id=>document.getElementById(id),show=id=>{for(const s of ['entry','lock','room'])$(s).style.display=s===id?'block':'none';};
+function dots(){ $('dots').replaceChildren(...Array.from({length:6},(_,i)=>{const d=document.createElement('span');d.className='dot'+(i<typed.length?' on':'');return d;}));}
+function reset(){typed='';dots();}
+function open(){reset();$('status').textContent='';$('prompt').textContent=pin?'Digite seu PIN de demonstração.':first?'Confirme o PIN de demonstração.':'Crie um PIN de seis dígitos para esta demonstração.';show('lock');}
+function digit(n){if(Date.now()<lockedUntil){$('status').textContent='Aguarde antes de tentar novamente.';return;}if(n==='del'){typed=typed.slice(0,-1);dots();return;}if(typed.length>=6)return;typed+=n;dots();if(typed.length!==6)return;
+if(!pin&&!first){first=typed;reset();$('prompt').textContent='Confirme o PIN de demonstração.';return;}
+if(!pin){if(typed===first){pin=typed;first=null;show('room');}else{first=null;reset();$('status').textContent='PINs diferentes. Comece novamente.';open();}return;}
+if(typed===pin){fail=0;show('room');}else{fail++;reset();$('status').textContent='PIN incorreto.';if(fail>=3){lockedUntil=Date.now()+30000;fail=0;$('status').textContent='Três tentativas incorretas. Aguarde 30 segundos.';}}}
+for(const n of ['1','2','3','4','5','6','7','8','9','','0','del']){const b=document.createElement('button');b.textContent=n==='del'?'⌫':n;b.disabled=n==='';b.setAttribute('aria-label',n==='del'?'Apagar':n);b.addEventListener('click',()=>digit(n));$('keys').append(b);}
+$('bird').addEventListener('click',()=>{clearTimeout(timer);taps++;if(taps>=5){taps=0;open();return;}timer=setTimeout(()=>taps=0,2500);});
+$('back').addEventListener('click',()=>{reset();show('entry');});$('exit').addEventListener('click',()=>{reset();show('entry');});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&$('room').style.display==='block'){reset();show('entry');}});
+dots();show('entry');
+})();
+</script></body></html>
