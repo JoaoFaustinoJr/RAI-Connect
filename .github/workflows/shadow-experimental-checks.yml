@@ -15,6 +15,8 @@ jobs:
           node-version: '22'
       - name: Check module syntax
         run: node --check shadow/entry-gate.js
+      - name: Test five-tap behavior and authorization
+        run: node shadow/entry-gate.test.mjs
       - name: Run Shadow static invariant checks
         run: node shadow/check-invariants.mjs
       - name: Verify isolation invariants
