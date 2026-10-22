@@ -10,12 +10,19 @@ export function installShadowEntry({bird, isAuthorized, onOpen, onError = () => 
   }
   let taps = 0;
   let lastTap = 0;
+  let firstTap = 0;
   let busy = false;
   let disposed = false;
-  async function handleTap() {
+  async function handleTap(event) {
+    if (!event.isTrusted) return;
     if (disposed || busy) return;
     const now = performance.now();
-    taps = now - lastTap > 2500 ? 1 : taps + 1;
+    if (now - lastTap > 800 || now - firstTap > 3500) {
+      taps = 1;
+      firstTap = now;
+    } else {
+      taps += 1;
+    }
     lastTap = now;
     if (taps !== 5) return;
     taps = 0;
@@ -29,14 +36,16 @@ export function installShadowEntry({bird, isAuthorized, onOpen, onError = () => 
       busy = false;
     }
   }
-  function reset() { taps = 0; lastTap = 0; }
+  function reset() { taps = 0; lastTap = 0; firstTap = 0; }
   function onVisibilityChange() { if (document.hidden) reset(); }
   bird.addEventListener('click', handleTap);
   document.addEventListener('visibilitychange', onVisibilityChange);
+  window.addEventListener('pagehide', reset);
   return () => {
     disposed = true;
     bird.removeEventListener('click', handleTap);
     document.removeEventListener('visibilitychange', onVisibilityChange);
+    window.removeEventListener('pagehide', reset);
   };
 }
 
