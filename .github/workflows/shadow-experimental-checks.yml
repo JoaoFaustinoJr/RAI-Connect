@@ -1,0 +1,30 @@
+# RAI Shadow — verificação automatizada da ramificação experimental
+# Não publica nem modifica o Connect de produção.
+name: Shadow experimental checks
+on:
+  push:
+    branches: [feature/rai-shadow-isolado]
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check module syntax
+        run: node --check shadow/entry-gate.js
+      - name: Verify isolation invariants
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f shadow/prototipo.html
+          test -f shadow/entry-gate.js
+          grep -q 'shadowMemberEnabled(supabase)' index.html
+          grep -q "frame.setAttribute('sandbox','allow-scripts')" index.html
+          if grep -Eq 'allow-scripts allow-same-origin|service_role|sb_secret_' shadow/prototipo.html index.html; then
+            echo 'Unsafe sandbox flags or sensitive credential marker found'
+            exit 1
+          fi
+          echo 'Static Shadow checks passed (not a security audit).'
