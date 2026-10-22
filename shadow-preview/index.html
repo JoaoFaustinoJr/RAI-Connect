@@ -20,8 +20,15 @@ if(typed===pin){fail=0;show('room');}else{fail++;reset();$('status').textContent
 for(const n of ['1','2','3','4','5','6','7','8','9','','0','del']){const b=document.createElement('button');b.textContent=n==='del'?'⌫':n;b.disabled=n==='';b.setAttribute('aria-label',n==='del'?'Apagar':n);b.addEventListener('click',()=>digit(n));$('keys').append(b);}
 $('bird').addEventListener('click',(event)=>{if(!event.isTrusted)return;clearTimeout(timer);taps++;if(taps>=5){taps=0;open();return;}timer=setTimeout(()=>taps=0,800);});
 $('back').addEventListener('click',()=>{reset();show('entry');});$('exit').addEventListener('click',()=>{reset();show('entry');});
-document.addEventListener('visibilitychange',()=>{if(document.hidden){clearTimeout(timer);taps=0;first=null;reset();show('entry');}});
-window.addEventListener('pagehide',()=>{clearTimeout(timer);taps=0;first=null;reset();show('entry');});
+function secureReturn(){clearTimeout(timer);taps=0;first=null;reset();show('entry');}
+let lastActive=Date.now();
+document.addEventListener('visibilitychange',()=>{if(document.hidden)secureReturn();else if(Date.now()-lastActive>1000)secureReturn();lastActive=Date.now();});
+window.addEventListener('pagehide',secureReturn);
+window.addEventListener('blur',secureReturn);
+window.addEventListener('focus',()=>{if(Date.now()-lastActive>1000)secureReturn();lastActive=Date.now();});
+document.addEventListener('freeze',secureReturn);
+document.addEventListener('resume',secureReturn);
+setInterval(()=>{const now=Date.now();if(now-lastActive>3000)secureReturn();lastActive=now;},1000);
 dots();if(new URLSearchParams(location.search).get('embed')==='1')open();else show('entry');
 })();
 </script></body></html>
