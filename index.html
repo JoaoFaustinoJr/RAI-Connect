@@ -295,4 +295,30 @@ if(link){link.setAttribute('href','#conversas');link.addEventListener('click',fu
 document.getElementById('contacts-nav')?.addEventListener('click',()=>{if(hub.classList.contains('connect-settings-open'))closeSettings()},true);
 document.getElementById('new-contact')?.addEventListener('click',()=>{if(hub.classList.contains('connect-settings-open'))closeSettings()},true);
 }if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();
+</script><script type="module">
+import {installShadowEntry,shadowMemberEnabled} from './shadow/entry-gate.js';
+const bird=document.querySelector('header.brand .bird');
+const supabaseClient=window.supabaseClient||window.supabase||window.sb||null;
+if(bird){
+ installShadowEntry({
+  bird,
+  isAuthorized:async()=>{
+   const client=window.supabaseClient||window.sb||window.supabaseClientInstance||null;
+   return !!client?.auth && await shadowMemberEnabled(client);
+  },
+  onOpen:async()=>{
+   if(document.getElementById('shadow-experiment-overlay'))return;
+   const overlay=document.createElement('div');overlay.id='shadow-experiment-overlay';
+   Object.assign(overlay.style,{position:'fixed',inset:'0',zIndex:'2147483647',background:'#050505',display:'flex',flexDirection:'column'});
+   const close=document.createElement('button');close.textContent='← Voltar ao Connect';close.setAttribute('aria-label','Fechar Shadow');
+   Object.assign(close.style,{background:'#15110a',color:'#e3bf77',border:'1px solid #65502b',padding:'16px',fontSize:'16px'});
+   const frame=document.createElement('iframe');frame.src='./shadow/prototipo.html?embed=1';frame.title='RAI Shadow — demonstração';frame.setAttribute('sandbox','allow-scripts allow-same-origin');
+   Object.assign(frame.style,{width:'100%',flex:'1',border:'0'});
+   const exit=()=>{frame.src='about:blank';overlay.remove();};
+   close.addEventListener('click',exit);document.addEventListener('visibilitychange',function hidden(){if(document.hidden){exit();document.removeEventListener('visibilitychange',hidden);}});
+   overlay.append(close,frame);document.body.append(overlay);
+  },
+  onError:()=>{}
+ });
+}
 </script></body></html>
