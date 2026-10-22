@@ -15,12 +15,12 @@ function reset(){typed='';dots();}
 function open(){reset();$('status').textContent='';$('prompt').textContent=pin?'Digite seu PIN de demonstração.':first?'Confirme o PIN de demonstração.':'Crie um PIN de seis dígitos para esta demonstração.';show('lock');}
 function digit(n){if(Date.now()<lockedUntil){$('status').textContent='Aguarde antes de tentar novamente.';return;}if(n==='del'){typed=typed.slice(0,-1);dots();return;}if(typed.length>=6)return;typed+=n;dots();if(typed.length!==6)return;
 if(!pin&&!first){first=typed;reset();$('prompt').textContent='Confirme o PIN de demonstração.';return;}
-if(!pin){if(typed===first){pin=typed;first=null;show('room');}else{first=null;reset();$('status').textContent='PINs diferentes. Comece novamente.';open();}return;}
+if(!pin){if(typed===first){pin=typed;first=null;show('room');}else{first=null;reset();open();$('status').textContent='PINs diferentes. Comece novamente.';}return;}
 if(typed===pin){fail=0;show('room');}else{fail++;reset();$('status').textContent='PIN incorreto.';if(fail>=3){lockedUntil=Date.now()+30000;fail=0;$('status').textContent='Três tentativas incorretas. Aguarde 30 segundos.';}}}
 for(const n of ['1','2','3','4','5','6','7','8','9','','0','del']){const b=document.createElement('button');b.textContent=n==='del'?'⌫':n;b.disabled=n==='';b.setAttribute('aria-label',n==='del'?'Apagar':n);b.addEventListener('click',()=>digit(n));$('keys').append(b);}
 $('bird').addEventListener('click',()=>{clearTimeout(timer);taps++;if(taps>=5){taps=0;open();return;}timer=setTimeout(()=>taps=0,2500);});
 $('back').addEventListener('click',()=>{reset();show('entry');});$('exit').addEventListener('click',()=>{reset();show('entry');});
-document.addEventListener('visibilitychange',()=>{if(document.hidden&&$('room').style.display==='block'){reset();show('entry');}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){reset();show('entry');}});
 dots();if(new URLSearchParams(location.search).get('embed')==='1')open();else show('entry');
 })();
 </script></body></html>
