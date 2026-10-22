@@ -48,6 +48,7 @@ import('./shadow/entry-gate.js').then(({installShadowEntry,shadowMemberEnabled})
    Object.assign(frame.style,{width:'100%',flex:'1',border:'0'});
    let closed=false;
    let authSubscription;
+   let accessCheck;
    const exit=()=>{if(closed)return;closed=true;document.removeEventListener('visibilitychange',hidden);window.removeEventListener('pagehide',exit);authSubscription?.unsubscribe();clearInterval(accessCheck);frame.src='about:blank';overlay.remove();};
    close.addEventListener('click',exit);
    const hidden=()=>{if(document.hidden)exit();};
@@ -64,7 +65,7 @@ import('./shadow/entry-gate.js').then(({installShadowEntry,shadowMemberEnabled})
      catch{exit();}
      finally{recheckBusy=false;}
    };
-   const accessCheck=setInterval(recheck,30000);
+   accessCheck=setInterval(recheck,30000);
    overlay.append(close,frame);document.body.append(overlay);
   },onError:()=>{}
  });
