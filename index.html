@@ -357,4 +357,21 @@ input.dispatchEvent(new Event('input',{bubbles:true}));menu.hidden=true;input.fo
 });
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
-})();</script></body></html>
+})();</script><script id="rai-games-invite-normalizer-v3">
+(function(){
+const root='https://joaofaustinojr.github.io/RunnBoot-Digital/';
+function normalize(raw){
+ if(!/Convite (?:para )?RunnBoot/i.test(raw))return raw;
+ const code=(raw.match(/(?:C[oó]digo da sala|Sala)\s*:\s*([A-Z0-9]{6})/i)||[])[1];
+ if(!code)return raw;
+ return ['🎮 Convite para RunnBoot – Uma Aventura STEAM!','Vamos jogar juntos?','Sala: '+code.toUpperCase(),'🎮 Entrar diretamente: '+root+'?room='+encodeURIComponent(code.toUpperCase())].join(String.fromCharCode(10));
+}
+function init(){
+const form=document.getElementById('message-form'),input=document.getElementById('message-text');
+if(!form||!input)return;
+form.addEventListener('submit',function(){const fixed=normalize(input.value);if(fixed!==input.value){input.value=fixed;input.dispatchEvent(new Event('input',{bubbles:true}))}},true);
+const version=document.createElement('span');version.id='rai-games-build';version.textContent='Jogos v3';version.style.cssText='font-size:10px;color:#a9bdc7;margin-left:5px';document.getElementById('chat-game-button')?.insertAdjacentElement('afterend',version);
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script></body></html>
