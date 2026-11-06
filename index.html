@@ -317,7 +317,7 @@ document.getElementById('new-contact')?.addEventListener('click',()=>{if(hub.cla
 (function(){
 const url='https://joaofaustinojr.github.io/RunnBoot-Digital/';
 const byId=id=>document.getElementById(id);
-function invitation(){const code=(byId('rai-game-code')?.value||'').trim();return '🎮 Convite RunnBoot – Uma Aventura STEAM!\\nVamos jogar juntos?\\n'+(code?'Código da sala: '+code+'\\n':'Peça o código da sala ao anfitrião.\\n')+'Abra o jogo: '+url}
+function invitation(){const code=(byId('rai-game-code')?.value||'').trim();return ['🎮 Convite RunnBoot – Uma Aventura STEAM!','Vamos jogar juntos?',code?'Sala: '+code:'Peça o código da sala ao anfitrião.', '🎮 Entrar: '+url+(code?'?room='+encodeURIComponent(code):'')].join(String.fromCharCode(10))}
 function feedback(s){byId('rai-game-feedback').textContent=s}
 function init(){
 const nav=byId('games-nav'),panel=byId('rai-games-panel');
@@ -352,7 +352,7 @@ document.getElementById('chat-game-cancel').addEventListener('click',()=>menu.hi
 document.getElementById('chat-game-prepare').addEventListener('click',()=>{
 const code=document.getElementById('chat-game-code').value.trim(),input=document.getElementById('message-text');
 if(!code){document.getElementById('chat-game-status').textContent='Informe o código da sala antes de convidar.';return}
-input.value='🎮 Convite para RunnBoot – Uma Aventura STEAM!\\nVamos jogar?\\nCódigo da sala: '+code+'\\nAbra: https://joaofaustinojr.github.io/RunnBoot-Digital/';
+input.value=['🎮 Convite para RunnBoot – Uma Aventura STEAM!','Vamos jogar?','Sala: '+code,'🎮 Entrar diretamente: https://joaofaustinojr.github.io/RunnBoot-Digital/?room='+encodeURIComponent(code)].join(String.fromCharCode(10));
 input.dispatchEvent(new Event('input',{bubbles:true}));menu.hidden=true;input.focus();
 });
 }
